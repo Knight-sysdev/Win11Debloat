@@ -77,11 +77,11 @@ function ShowAppSelectionForm {
         $global:SelectedApps = $selectionBox.CheckedItems
 
         # Create file that stores selected apps if it doesn't exist
-        if (!(Test-Path "$PSScriptRoot/CustomAppsList")) {
-            $null = New-Item "$PSScriptRoot/CustomAppsList"
+        if (!(Test-Path "$PSScriptRoot/CustomAppsList.txt")) {
+            $null = New-Item "$PSScriptRoot/CustomAppsList.txt"
         } 
 
-        Set-Content -Path "$PSScriptRoot/CustomAppsList" -Value $global:SelectedApps
+        Set-Content -Path "$PSScriptRoot/CustomAppsList.txt" -Value $global:SelectedApps
 
         $form.Close()
     }
@@ -1136,12 +1136,12 @@ if ((-not $global:Params.Count) -or $RunDefaults -or $RunWin11Defaults -or ($SPP
 
                         # Print parameter description and add parameter to Params list
                         if ($parameterName -eq "RemoveAppsCustom") {
-                            if (-not (Test-Path "$PSScriptRoot/CustomAppsList")) {
+                            if (-not (Test-Path "$PSScriptRoot/CustomAppsList.txt")) {
                                 # Apps file does not exist, skip
                                 continue
                             }
                             
-                            $appsList = ReadAppslistFromFile "$PSScriptRoot/CustomAppsList"
+                            $appsList = ReadAppslistFromFile "$PSScriptRoot/CustomAppsList.txt"
                             Write-Output "- Remove $($appsList.Count) apps:"
                             Write-Host $appsList -ForegroundColor DarkGray
                         }
@@ -1187,12 +1187,12 @@ else {
             continue
         }
         'RemoveAppsCustom' {
-            if (-not (Test-Path "$PSScriptRoot/CustomAppsList")) {
+            if (-not (Test-Path "$PSScriptRoot/CustomAppsList.txt")) {
                 Write-Host "> Error: Could not load custom apps list from file, no apps were removed" -ForegroundColor Red
                 continue
             }
             
-            $appsList = ReadAppslistFromFile "$PSScriptRoot/CustomAppsList"
+            $appsList = ReadAppslistFromFile "$PSScriptRoot/CustomAppsList.txt"
             Write-Output "> Removing $($appsList.Count) apps..."
             RemoveApps $appsList
             continue
